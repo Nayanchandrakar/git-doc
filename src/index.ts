@@ -1,9 +1,10 @@
+import { GitRepositoryAnalyzer } from "@/lib/helpers/git-analyzer.js"
+import { gitCloneSchema } from "@/lib/schemas/git-clone-schema.js"
+import { S3Service } from "@/lib/services/s3-service.js"
+import { StringUtils } from "@/utils/string-utils.js"
 import { serve } from "@hono/node-server"
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
-import { GitRepositoryAnalyzer } from "./lib/helpers/git-analyzer.js"
-import { gitCloneSchema } from "./lib/schemas/git-clone-schema.js"
-import { StringUtils } from "./utils/string-utils.js"
 
 const app = new Hono()
 
@@ -24,7 +25,9 @@ app.get(
         repositoryUrl,
         repositoryName,
       )
-      return c.text(output)
+
+      const url = await S3Service.uploadIndexFile(userName, repositoryName, output)
+      return c.json(url)
     } catch (error) {
       if (error instanceof Error) {
         return c.json(

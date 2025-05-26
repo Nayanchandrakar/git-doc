@@ -1,11 +1,11 @@
-import * as path from "path"
-import { fileURLToPath } from "url"
+import { EXCLUDED_FILES } from "@/constants/exclude-files.js"
+import { git } from "@/lib/services/git-service.js"
+import { MapService } from "@/lib/services/map-service.js"
+import { StringUtils } from "@/utils/string-utils.js"
 import * as fs from "fs/promises"
 import pLimit from "p-limit"
-import { EXCLUDED_FILES } from "../../constants/exclude-files.js"
-import { StringUtils } from "../../utils/string-utils.js"
-import { git } from "../services/git-service.js"
-import { MapService } from "../services/map-service.js"
+import * as path from "path"
+import { fileURLToPath } from "url"
 
 const CONCURRENCY_LIMIT = Number(process.env.CONCURRENCY_LIMIT) || 10
 const concurrencyLimiter = pLimit(CONCURRENCY_LIMIT)
@@ -18,7 +18,7 @@ interface FileInfo {
 }
 
 export class GitRepositoryAnalyzer {
-  private constructor() {}
+  private constructor() { }
 
   static async collectFiles(directory: string, baseDirectory: string) {
     const filePaths: string[] = []
@@ -66,10 +66,7 @@ export class GitRepositoryAnalyzer {
     return treeStructure
   }
 
-  static async readFileContents(
-    directory: string,
-    filePaths: string[],
-  ): Promise<FileInfo[]> {
+  static async readFileContents(directory: string, filePaths: string[]) {
     const fileContents: FileInfo[] = []
     const readTasks = filePaths.map((filePath) =>
       concurrencyLimiter(async () => {
@@ -167,7 +164,6 @@ export class GitRepositoryAnalyzer {
       output += `================================================\n`
       output += `${file.content}\n\n`
     }
-
     return output
   }
 

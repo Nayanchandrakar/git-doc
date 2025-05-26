@@ -2,7 +2,7 @@
   "name": "git-doc",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "bun --watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "lint": "bunx biome lint --write .",
