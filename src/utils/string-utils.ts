@@ -6,6 +6,6 @@ export class StringUtils {
   }
 
   static createRepoPath(userName: string, repositoryName: string) {
-    return `../repository/${userName.toLowerCase()}/${repositoryName}/${createId()}`
+    return `../../../repository/${userName.toLowerCase()}/${repositoryName}/${createId()}`
   }
 }
