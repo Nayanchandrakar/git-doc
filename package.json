@@ -8,9 +8,15 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.14.2",
-    "hono": "^4.7.10"
+    "@hono/zod-validator": "^0.5.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "hono": "^4.7.10",
+    "p-limit": "^6.2.0",
+    "simple-git": "^3.27.0",
+    "zod": "^3.25.28"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.14",
     "@types/node": "^20.11.17",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
