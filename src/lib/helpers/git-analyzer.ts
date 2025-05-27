@@ -18,7 +18,7 @@ interface FileInfo {
 }
 
 export class GitRepositoryAnalyzer {
-  private constructor() { }
+  private constructor() {}
 
   static async collectFiles(directory: string, baseDirectory: string) {
     const filePaths: string[] = []
@@ -145,37 +145,37 @@ export class GitRepositoryAnalyzer {
     repositoryName: string,
     fileContents: FileInfo[],
     totalTokenCount: number,
-    directoryTree: string
+    directoryTree: string,
   ): string {
-    const separator = '────'.repeat(24);
-    const sectionBreak = '\n'.repeat(2);
+    const separator = "────".repeat(24)
+    const sectionBreak = "\n".repeat(2)
 
-    let output = `${separator}\n`;
-    output += `Repository Analysis: ${userName}/${repositoryName}\n`;
-    output += `${separator}\n\n`;
+    let output = `${separator}\n`
+    output += `Repository Analysis: ${userName}/${repositoryName}\n`
+    output += `${separator}\n\n`
 
-    output += `Summary:\n`;
-    output += `- Files Analyzed: ${fileContents.length}\n`;
-    output += `- Estimated Tokens: ${totalTokenCount}\n`;
-    output += `${sectionBreak}`;
+    output += `Summary:\n`
+    output += `- Files Analyzed: ${fileContents.length}\n`
+    output += `- Estimated Tokens: ${totalTokenCount}\n`
+    output += `${sectionBreak}`
 
-    output += `Repository Structure:\n`;
-    output += `└── ${userName}/${repositoryName}/\n`;
+    output += `Repository Structure:\n`
+    output += `└── ${userName}/${repositoryName}/\n`
     output += directoryTree
-      .split('\n')
+      .split("\n")
       .map((line) => `    ${line}`)
-      .join('\n');
-    output += `${sectionBreak}`;
+      .join("\n")
+    output += `${sectionBreak}`
 
     for (const file of fileContents) {
-      output += `${separator}\n`;
-      output += `File: ${file.path}\n`;
-      output += `${separator}\n\n`;
-      output += `${file.content}\n`;
-      output += `${sectionBreak}`;
+      output += `${separator}\n`
+      output += `File: ${file.path}\n`
+      output += `${separator}\n\n`
+      output += `${file.content}\n`
+      output += `${sectionBreak}`
     }
 
-    return output;
+    return output
   }
 
   private static async removeCloneDirectory(cloneDirectory: string) {
