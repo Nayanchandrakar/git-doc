@@ -1,16 +1,20 @@
+import { exec } from "child_process"
 import * as path from "path"
 import { fileURLToPath } from "url"
-import { EXCLUDED_FILES } from "@/constants/exclude-files.js"
+import { promisify } from "util"
+import { EXCLUDED_PATTERNS } from "@/constants/exclude-files.js"
 import { git } from "@/lib/services/git-service.js"
 import { MapService } from "@/lib/services/map-service.js"
 import { StringUtils } from "@/utils/string-utils.js"
 import * as fs from "fs/promises"
+import { minimatch } from "minimatch" // Add minimatch for pattern matching
 import pLimit from "p-limit"
 
 const CONCURRENCY_LIMIT = Number(process.env.CONCURRENCY_LIMIT) || 10
 const concurrencyLimiter = pLimit(CONCURRENCY_LIMIT)
 const currentFilePath = fileURLToPath(import.meta.url)
 const currentDirPath = path.dirname(currentFilePath)
+const execAsync = promisify(exec)
 
 interface FileInfo {
   path: string
@@ -27,9 +31,8 @@ export class GitRepositoryAnalyzer {
     await Promise.all(
       entries.map(async (entry) => {
         const fullPath = path.join(directory, entry.name)
-        if (this.isFileExcluded(fullPath, entry.name)) return
-
         const relativePath = path.relative(baseDirectory, fullPath)
+
         if (entry.isDirectory()) {
           filePaths.push(...(await this.collectFiles(fullPath, baseDirectory)))
         } else {
@@ -41,27 +44,13 @@ export class GitRepositoryAnalyzer {
     return filePaths
   }
 
-  static async generateDirectoryTree(
-    directory: string,
-    baseDirectory: string,
-    indent = "",
-  ): Promise<string> {
-    const entries = await fs.readdir(directory, { withFileTypes: true })
-    let treeStructure = ""
-
-    for (const entry of entries) {
-      const fullPath = path.join(directory, entry.name)
-      if (this.isFileExcluded(fullPath, entry.name)) continue
-
-      treeStructure += `${indent}└── ${entry.name}${entry.isDirectory() ? "/" : ""}\n`
-      if (entry.isDirectory()) {
-        treeStructure += await this.generateDirectoryTree(
-          fullPath,
-          baseDirectory,
-          indent + "    ",
-        )
-      }
-    }
+  static async generateDirectoryTree(baseDirectory: string, indent = "") {
+    const { stdout } = await execAsync(`tree -a .`, { cwd: baseDirectory })
+    const treeStructure = stdout
+      .split("\n")
+      .filter((line) => line.trim() !== "")
+      .map((line) => `${indent}${line}`)
+      .join("\n")
 
     return treeStructure
   }
@@ -86,6 +75,27 @@ export class GitRepositoryAnalyzer {
     return fileContents
   }
 
+  static async deleteExcludedFiles(directory: string, baseDirectory: string) {
+    const entries = await fs.readdir(directory, { withFileTypes: true })
+
+    await Promise.all(
+      entries.map(async (entry) => {
+        const fullPath = path.join(directory, entry.name)
+        const relativePath = path.relative(baseDirectory, fullPath)
+
+        const isExcluded = EXCLUDED_PATTERNS.some((pattern) =>
+          minimatch(relativePath, pattern, { matchBase: true, nocase: false }),
+        )
+
+        if (isExcluded) {
+          await fs.rm(fullPath, { recursive: true, force: true })
+        } else if (entry.isDirectory()) {
+          await this.deleteExcludedFiles(fullPath, baseDirectory)
+        }
+      }),
+    )
+  }
+
   static async analyzeGitRepository(
     userName: string,
     repositoryUrl: string,
@@ -96,19 +106,19 @@ export class GitRepositoryAnalyzer {
 
     try {
       await git.clone(repositoryUrl, cloneDirectory, ["--depth", "1"])
+      await this.deleteExcludedFiles(cloneDirectory, cloneDirectory)
+
       const filesToAnalyze = await this.collectFiles(
         cloneDirectory,
         cloneDirectory,
       )
+
       const fileContents = await this.readFileContents(
         cloneDirectory,
         filesToAnalyze,
       )
       const totalTokenCount = await this.calculateTokenCount(fileContents)
-      const directoryTree = await this.generateDirectoryTree(
-        cloneDirectory,
-        cloneDirectory,
-      )
+      const directoryTree = await this.generateDirectoryTree(cloneDirectory)
 
       return this.formatAnalysisOutput(
         userName,
@@ -124,12 +134,6 @@ export class GitRepositoryAnalyzer {
     } finally {
       await this.removeCloneDirectory(cloneDirectory)
     }
-  }
-
-  private static isFileExcluded(fullPath: string, fileName: string) {
-    return EXCLUDED_FILES.some(
-      (pattern) => fullPath.includes(pattern) || fileName === pattern,
-    )
   }
 
   private static async calculateTokenCount(fileContents: FileInfo[]) {

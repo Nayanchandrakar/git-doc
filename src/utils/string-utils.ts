@@ -1,7 +1,7 @@
-import { LOCALHOST_IP } from "@/constants/localhost.js";
-import { getConnInfo } from "@hono/node-server/conninfo";
-import { createId } from "@paralleldrive/cuid2";
-import type { Context } from "hono";
+import { LOCALHOST_IP } from "@/constants/localhost.js"
+import { getConnInfo } from "@hono/node-server/conninfo"
+import { createId } from "@paralleldrive/cuid2"
+import type { Context } from "hono"
 
 export class StringUtils {
   static createRepoUrl(userName: string, repositoryName: string) {
@@ -12,22 +12,26 @@ export class StringUtils {
     return `../../../repository/${userName.toLowerCase()}/${repositoryName}`
   }
 
-  static getRepositoryStorageKey(userName: string, repositoryName: string) {
-    return `repositories/${userName.toLowerCase()}-${repositoryName}/${createId()}.txt`
+  static getRepositoryStorageKey(
+    userName: string,
+    repositoryName: string,
+    extension: string,
+  ) {
+    return `repositories/${userName.toLowerCase()}-${repositoryName}/${createId()}.${extension}`
   }
 
   static async getIdentityHash(c: Context) {
     const info = getConnInfo(c)
-    const ip = info.remote?.address || LOCALHOST_IP;
+    const ip = info.remote?.address || LOCALHOST_IP
     const ua = c.req.header("User-Agent")
 
-    const data = `${ua}-${ip}`;
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(data);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer);
+    const data = `${ua}-${ip}`
+    const encoder = new TextEncoder()
+    const dataBuffer = encoder.encode(data)
+    const hashBuffer = await crypto.subtle.digest("SHA-256", dataBuffer)
 
     return Array.from(new Uint8Array(hashBuffer))
       .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
+      .join("")
   }
 }

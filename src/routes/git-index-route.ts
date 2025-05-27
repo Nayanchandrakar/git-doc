@@ -31,6 +31,7 @@ const app = new Hono()
           output,
         )
         return c.json({ data: url })
+        // return c.text(output)
       } catch (error) {
         if (error instanceof Error) {
           return c.json(
