@@ -26,8 +26,9 @@ app.get(
         repositoryName,
       )
 
-      const url = await S3Service.uploadIndexFile(userName, repositoryName, output)
-      return c.json(url)
+      // const url = await S3Service.uploadIndexFile(userName, repositoryName, output)
+      // return c.json({ data: url })
+      return c.text(output)
     } catch (error) {
       if (error instanceof Error) {
         return c.json(

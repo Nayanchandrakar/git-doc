@@ -1,11 +1,11 @@
+import * as path from "path"
+import { fileURLToPath } from "url"
 import { EXCLUDED_FILES } from "@/constants/exclude-files.js"
 import { git } from "@/lib/services/git-service.js"
 import { MapService } from "@/lib/services/map-service.js"
 import { StringUtils } from "@/utils/string-utils.js"
 import * as fs from "fs/promises"
 import pLimit from "p-limit"
-import * as path from "path"
-import { fileURLToPath } from "url"
 
 const CONCURRENCY_LIMIT = Number(process.env.CONCURRENCY_LIMIT) || 10
 const concurrencyLimiter = pLimit(CONCURRENCY_LIMIT)
@@ -145,26 +145,37 @@ export class GitRepositoryAnalyzer {
     repositoryName: string,
     fileContents: FileInfo[],
     totalTokenCount: number,
-    directoryTree: string,
+    directoryTree: string
   ): string {
-    let output = `Repository: ${userName}/${repositoryName}\n\n`
-    output += `Files analyzed: ${fileContents.length}\n\n`
-    output += `Estimated tokens: ${totalTokenCount}\n\n`
-    output += `Repository structure:\n`
-    output += `└── ${userName}/${repositoryName}/\n`
-    output +=
-      directoryTree
-        .split("\n")
-        .map((line) => `    ${line}`)
-        .join("\n") + "\n\n"
+    const separator = '────'.repeat(24);
+    const sectionBreak = '\n'.repeat(2);
+
+    let output = `${separator}\n`;
+    output += `Repository Analysis: ${userName}/${repositoryName}\n`;
+    output += `${separator}\n\n`;
+
+    output += `Summary:\n`;
+    output += `- Files Analyzed: ${fileContents.length}\n`;
+    output += `- Estimated Tokens: ${totalTokenCount}\n`;
+    output += `${sectionBreak}`;
+
+    output += `Repository Structure:\n`;
+    output += `└── ${userName}/${repositoryName}/\n`;
+    output += directoryTree
+      .split('\n')
+      .map((line) => `    ${line}`)
+      .join('\n');
+    output += `${sectionBreak}`;
 
     for (const file of fileContents) {
-      output += `================================================\n`
-      output += `File: ${file.path}\n`
-      output += `================================================\n`
-      output += `${file.content}\n\n`
+      output += `${separator}\n`;
+      output += `File: ${file.path}\n`;
+      output += `${separator}\n\n`;
+      output += `${file.content}\n`;
+      output += `${sectionBreak}`;
     }
-    return output
+
+    return output;
   }
 
   private static async removeCloneDirectory(cloneDirectory: string) {
