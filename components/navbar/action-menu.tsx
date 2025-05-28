@@ -10,7 +10,10 @@ export const ActionMenu = () => {
       <Link
         href={configuration.social.x}
         target="_blank"
-        className={buttonVariants({ variant: "outline", size: "icon" })}
+        className={buttonVariants({
+          variant: "outline",
+          size: "icon",
+        })}
       >
         <Icons.X className="size-4 fill-current" aria-hidden="true" />
       </Link>

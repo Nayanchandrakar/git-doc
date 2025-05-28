@@ -20,9 +20,11 @@ import {
 } from "@/lib/schemas/git-clone-schema"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
 export function CreateGitIndexForm() {
+  const router = useRouter()
   const form = useForm<checkGithubRepoSchemaType>({
     resolver: zodResolver(checkGithubRepoSchema),
     defaultValues: { url: "" },
@@ -32,7 +34,8 @@ export function CreateGitIndexForm() {
   })
 
   function onSubmit(values: checkGithubRepoSchemaType) {
-    console.log(values)
+    const { pathname } = new URL(values.url)
+    router.push(pathname)
   }
 
   return (
