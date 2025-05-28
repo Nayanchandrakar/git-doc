@@ -1,5 +1,3 @@
-import { Footer } from "@/components/global/footer"
-import { Navbar } from "@/components/navbar"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import "@/style/globals.css"
 import type { Metadata } from "next"
@@ -28,9 +26,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
           {children}
-          <Footer />
         </ThemeProvider>
       </body>
     </html>

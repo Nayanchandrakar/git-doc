@@ -3,7 +3,7 @@
 import { Container } from "@/components/global/container"
 import { BorderBeam } from "@/components/magicui/border-beam"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -39,19 +39,16 @@ export function CreateGitIndexForm() {
   }
 
   return (
-    <Container>
-      <Card className="relative w-full mt-12 overflow-hidden mx-auto max-w-4xl bg-rose-500/5">
+    <Container className="mt-12">
+      <Card className="relative w-full overflow-hidden mx-auto max-w-3xl bg-rose-500/5">
         <CardContent>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex items-end gap-3"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="url"
                 render={({ field }) => (
-                  <FormItem className="w-full space-y-1">
+                  <FormItem className="w-full">
                     <FormLabel>Github repository url</FormLabel>
                     <FormControl>
                       <Input
@@ -63,16 +60,18 @@ export function CreateGitIndexForm() {
                   </FormItem>
                 )}
               />
-              <Button
-                className="bg-rose-500 hover:bg-rose-500/80 text-white"
-                type="submit"
-              >
-                Create Index
-              </Button>
             </form>
           </Form>
         </CardContent>
-        <BorderBeam duration={10} size={200} />
+        <CardFooter className="justify-end">
+          <Button
+            className="bg-rose-500 hover:bg-rose-500/80 text-white"
+            type="submit"
+          >
+            Create Index
+          </Button>
+        </CardFooter>
+        <BorderBeam duration={10} size={150} />
       </Card>
     </Container>
   )

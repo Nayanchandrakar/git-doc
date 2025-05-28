@@ -5,17 +5,15 @@ import { s3Service } from "@/lib/services/s3-service"
 import { StringUtils } from "@/lib/utils/string-utils"
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
+import { HTTPException } from 'hono/http-exception'
 
 const gitIndexRouter = new Hono()
-  .get("/", (c) => {
-    return c.json({ message: "Hello world!" })
-  })
-  .get(
-    "/:userName/:repositoryName",
+  .post(
+    "/create",
     gitIndexRatelimit,
-    zValidator("param", gitCloneSchema),
+    zValidator("form", gitCloneSchema),
     async (c) => {
-      const { repositoryName, userName } = c.req.valid("param")
+      const { repositoryName, userName } = c.req.valid("form")
       const repositoryUrl = StringUtils.createRepoUrl(userName, repositoryName)
 
       try {
@@ -25,27 +23,24 @@ const gitIndexRouter = new Hono()
           repositoryName,
         )
 
-        // const fileName = StringUtils.getRepositoryStorageKey(
-        //   userName,
-        //   repositoryName,
-        //   "txt",
-        // );
+        const fileName = StringUtils.getRepositoryStorageKey(
+          userName,
+          repositoryName,
+          "txt",
+        );
 
-        // await s3Service.uploadObjects({
-        //   Key: fileName,
-        //   Body: output,
-        //   ContentType: "text/plain",
-        // })
+        await s3Service.uploadObjects({
+          Key: fileName,
+          Body: output,
+          ContentType: "text/plain",
+        })
 
-        // return c.json({ data: `https://d33aluc0l6cahu.cloudfront.net/${fileName}` })
-        return c.text(output)
+        return c.json({ data: `https://d33aluc0l6cahu.cloudfront.net/${fileName}` }, 200)
+
       } catch (error) {
-        if (error instanceof Error) {
-          return c.json(
-            `Error cloning or analyzing repository: ${error.message}`,
-            500,
-          )
-        }
+        const message = error instanceof Error ? error.message : "Somethign went wrong!"
+        console.log(message)
+        throw new HTTPException(500, { message })
       }
     },
   )

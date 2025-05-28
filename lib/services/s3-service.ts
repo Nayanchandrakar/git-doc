@@ -33,7 +33,7 @@ class S3Service {
 
   async uploadObjects(props: UploadObjectProps) {
     const command = new PutObjectCommand({
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET,
       ...props,
     })
 

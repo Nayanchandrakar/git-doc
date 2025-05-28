@@ -5,7 +5,7 @@ class UpstashRateLimit {
   private static instance: UpstashRateLimit
   private static globalRateLimiter: Ratelimit | null = null
 
-  constructor() {}
+  constructor() { }
 
   static getInstance() {
     if (!UpstashRateLimit.instance) {
@@ -18,7 +18,7 @@ class UpstashRateLimit {
     if (!UpstashRateLimit.globalRateLimiter) {
       UpstashRateLimit.globalRateLimiter = new Ratelimit({
         redis,
-        limiter: Ratelimit.slidingWindow(20, "30 m"),
+        limiter: Ratelimit.slidingWindow(100, "30 m"),
       })
     }
     return UpstashRateLimit.globalRateLimiter

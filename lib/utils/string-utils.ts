@@ -9,7 +9,7 @@ export class StringUtils {
   }
 
   static createRepoPath(userName: string, repositoryName: string) {
-    return `../../../repository/${userName.toLowerCase()}/${repositoryName}`
+    return `../repository/${userName.toLowerCase()}/${repositoryName}`
   }
 
   static getRepositoryStorageKey(
