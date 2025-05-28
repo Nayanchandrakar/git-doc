@@ -1,5 +1,5 @@
-import { upstashRateLimit } from "@/lib/services/ratelimit-service.js"
-import { StringUtils } from "@/utils/string-utils.js"
+import { upstashRateLimit } from "@/lib/services/ratelimit-service"
+import { StringUtils } from "@/lib/utils/string-utils"
 import { createMiddleware } from "hono/factory"
 
 export const gitIndexRatelimit = createMiddleware(async (c, next) => {
