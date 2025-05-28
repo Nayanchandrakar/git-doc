@@ -1,7 +1,7 @@
-import { LOCALHOST_IP } from "@/constants/localhost.js"
-import { getConnInfo } from "@hono/node-server/conninfo"
+import { LOCALHOST_IP } from "@/lib/constants/localhost"
 import { createId } from "@paralleldrive/cuid2"
 import type { Context } from "hono"
+import { getConnInfo } from "hono/vercel"
 
 export class StringUtils {
   static createRepoUrl(userName: string, repositoryName: string) {

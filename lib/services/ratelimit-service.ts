@@ -1,11 +1,11 @@
-import { redis } from "@/lib/redis/index.js"
+import { redis } from "@/lib/redis"
 import { Ratelimit } from "@upstash/ratelimit"
 
 class UpstashRateLimit {
   private static instance: UpstashRateLimit
   private static globalRateLimiter: Ratelimit | null = null
 
-  constructor() { }
+  constructor() {}
 
   static getInstance() {
     if (!UpstashRateLimit.instance) {

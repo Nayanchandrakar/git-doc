@@ -2,12 +2,12 @@ import { exec } from "child_process"
 import * as path from "path"
 import { fileURLToPath } from "url"
 import { promisify } from "util"
-import { EXCLUDED_PATTERNS } from "@/constants/exclude-files.js"
-import { git } from "@/lib/services/git-service.js"
-import { MapService } from "@/lib/services/map-service.js"
-import { StringUtils } from "@/utils/string-utils.js"
+import { EXCLUDED_PATTERNS } from "@/lib/constants/exclude-files"
+import { git } from "@/lib/services/git-service"
+import { MapService } from "@/lib/services/map-service"
+import { StringUtils } from "@/lib/utils/string-utils"
 import * as fs from "fs/promises"
-import { minimatch } from "minimatch" // Add minimatch for pattern matching
+import { minimatch } from "minimatch"
 import pLimit from "p-limit"
 
 const CONCURRENCY_LIMIT = Number(process.env.CONCURRENCY_LIMIT) || 10
@@ -21,7 +21,7 @@ interface FileInfo {
   content: string
 }
 
-export class GitRepositoryAnalyzer {
+export class GitAnalyzerService {
   private constructor() {}
 
   static async collectFiles(directory: string, baseDirectory: string) {
