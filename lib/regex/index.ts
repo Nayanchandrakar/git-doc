@@ -1,1 +1,1 @@
-export const githubRegex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+(?:\/)?$/;
+export const githubRegex = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+(?:\/)?$/

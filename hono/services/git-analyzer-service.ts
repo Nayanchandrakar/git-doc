@@ -7,7 +7,7 @@ import { git } from "@/lib/services/git-service"
 import { MapService } from "@/lib/services/map-service"
 import { StringUtils } from "@/lib/utils/string-utils"
 import * as fs from "fs/promises"
-import { HTTPException } from 'hono/http-exception'
+import { HTTPException } from "hono/http-exception"
 import { minimatch } from "minimatch"
 import pLimit from "p-limit"
 
@@ -23,7 +23,7 @@ interface FileInfo {
 }
 
 export class GitAnalyzerService {
-  private constructor() { }
+  private constructor() {}
 
   static async collectFiles(directory: string, baseDirectory: string) {
     const filePaths: string[] = []

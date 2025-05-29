@@ -5,44 +5,47 @@ import { s3Service } from "@/lib/services/s3-service"
 import { StringUtils } from "@/lib/utils/string-utils"
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
-import { HTTPException } from 'hono/http-exception'
+import { HTTPException } from "hono/http-exception"
 
-const gitIndexRouter = new Hono()
-  .post(
-    "/create",
-    gitIndexRatelimit,
-    zValidator("form", gitCloneSchema),
-    async (c) => {
-      const { repositoryName, userName } = c.req.valid("form")
-      const repositoryUrl = StringUtils.createRepoUrl(userName, repositoryName)
+const gitIndexRouter = new Hono().post(
+  "/create",
+  gitIndexRatelimit,
+  zValidator("form", gitCloneSchema),
+  async (c) => {
+    const { repositoryName, userName } = c.req.valid("form")
+    const repositoryUrl = StringUtils.createRepoUrl(userName, repositoryName)
 
-      try {
-        const output = await GitAnalyzerService.analyzeGitRepository(
-          userName,
-          repositoryUrl,
-          repositoryName,
-        )
+    try {
+      const output = await GitAnalyzerService.analyzeGitRepository(
+        userName,
+        repositoryUrl,
+        repositoryName,
+      )
 
-        const fileName = StringUtils.getRepositoryStorageKey(
-          userName,
-          repositoryName,
-          "txt",
-        );
+      const fileName = StringUtils.getRepositoryStorageKey(
+        userName,
+        repositoryName,
+        "txt",
+      );
 
-        await s3Service.uploadObjects({
-          Key: fileName,
-          Body: output,
-          ContentType: "text/plain",
-        })
+      await s3Service.uploadObjects({
+        Key: fileName,
+        Body: output,
+        ContentType: "text/plain",
+      })
 
-        return c.json({ data: `https://d33aluc0l6cahu.cloudfront.net/${fileName}` }, 200)
-
-      } catch (error) {
-        const message = error instanceof Error ? error.message : "Somethign went wrong!"
-        console.log(message)
-        throw new HTTPException(500, { message })
+      return c.json(
+        { data: `https://d33aluc0l6cahu.cloudfront.net/${fileName}` },
+        200,
+      )
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new HTTPException(500, { message: error.message })
       }
-    },
-  )
+
+      throw error
+    }
+  },
+)
 
 export { gitIndexRouter }

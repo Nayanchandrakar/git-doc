@@ -5,7 +5,7 @@ class UpstashRateLimit {
   private static instance: UpstashRateLimit
   private static globalRateLimiter: Ratelimit | null = null
 
-  constructor() { }
+  constructor() {}
 
   static getInstance() {
     if (!UpstashRateLimit.instance) {

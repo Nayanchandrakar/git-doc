@@ -3,7 +3,7 @@
 import { Container } from "@/components/global/container"
 import { BorderBeam } from "@/components/magicui/border-beam"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -19,12 +19,15 @@ import {
   checkGithubRepoSchemaType,
 } from "@/lib/schemas/git-clone-schema"
 
+import { ActionButtons } from "@/components/forms/pages/home/action-buttons"
+import { ExampleRepositories } from "@/components/forms/pages/home/example-repos-form"
+import { useCreateRepositoryIndex } from "@/hooks/hono/use-repository"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
 export function CreateGitIndexForm() {
-  const router = useRouter()
+  const { mutateAsync, data, isPending } = useCreateRepositoryIndex()
+
   const form = useForm<checkGithubRepoSchemaType>({
     resolver: zodResolver(checkGithubRepoSchema),
     defaultValues: { url: "" },
@@ -35,8 +38,11 @@ export function CreateGitIndexForm() {
 
   function onSubmit(values: checkGithubRepoSchemaType) {
     const { pathname } = new URL(values.url)
-    router.push(pathname)
+    const paths = pathname.split("/")
+    mutateAsync({ userName: paths[1], repositoryName: paths[2] })
   }
+
+  const isResponseReady = !!(data && !isPending)
 
   return (
     <Container className="mt-12">
@@ -50,27 +56,31 @@ export function CreateGitIndexForm() {
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Github repository url</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder={configuration.social.github}
-                        {...field}
-                      />
-                    </FormControl>
+                    <div className="flex items-center gap-4">
+                      <FormControl>
+                        <Input
+                          disabled={isPending}
+                          placeholder={configuration.social.github}
+                          {...field}
+                        />
+                      </FormControl>
+                      <Button
+                        className="bg-rose-500 hover:bg-rose-500/80 text-white"
+                        type="submit"
+                        disabled={isPending}
+                      >
+                        Create Index
+                      </Button>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </form>
+            <ActionButtons data={data!} show={isResponseReady} />
+            <ExampleRepositories isPending={isPending} />
           </Form>
         </CardContent>
-        <CardFooter className="justify-end">
-          <Button
-            className="bg-rose-500 hover:bg-rose-500/80 text-white"
-            type="submit"
-          >
-            Create Index
-          </Button>
-        </CardFooter>
         <BorderBeam duration={10} size={150} />
       </Card>
     </Container>
