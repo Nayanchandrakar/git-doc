@@ -46,7 +46,7 @@ export function CreateGitIndexForm() {
 
   return (
     <Container className="mt-12">
-      <Card className="relative w-full overflow-hidden mx-auto max-w-3xl bg-rose-500/5">
+      <Card className="relative w-full overflow-hidden mx-auto max-w-3xl bg-rose-500/10 border-rose-500/30 rounded-xl border-2 shadow-rose-600/10 shadow-2xl">
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -55,8 +55,10 @@ export function CreateGitIndexForm() {
                 name="url"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Github repository url</FormLabel>
-                    <div className="flex items-center gap-4">
+                    <FormLabel className="text-zinc-200">
+                      Github repository url
+                    </FormLabel>
+                    <div className="flex sm:items-center gap-4 flex-col sm:flex-row">
                       <FormControl>
                         <Input
                           disabled={isPending}
@@ -64,11 +66,7 @@ export function CreateGitIndexForm() {
                           {...field}
                         />
                       </FormControl>
-                      <Button
-                        className="bg-rose-500 hover:bg-rose-500/80 text-white"
-                        type="submit"
-                        disabled={isPending}
-                      >
+                      <Button type="submit" loading={isPending}>
                         Create Index
                       </Button>
                     </div>

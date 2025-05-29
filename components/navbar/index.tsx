@@ -4,7 +4,7 @@ import { Logo } from "@/components/navbar/logo"
 
 export const Navbar = () => {
   return (
-    <header className="border-b border-rose-500/20 w-full h-14">
+    <header className="border-b border-rose-500/30 w-full h-14">
       <Container asChild className="flex items-center justify-between gap-5">
         <nav>
           <Logo />

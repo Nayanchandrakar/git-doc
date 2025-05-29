@@ -26,7 +26,7 @@ const gitIndexRouter = new Hono().post(
         userName,
         repositoryName,
         "txt",
-      );
+      )
 
       await s3Service.uploadObjects({
         Key: fileName,
