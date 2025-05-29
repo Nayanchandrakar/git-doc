@@ -1,0 +1,56 @@
+# Node modules
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment files
+.env
+.env.*
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build outputs and coverage
+.next
+out
+dist
+coverage
+
+# Test files and configs
+*.test.js
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.ts
+*.spec.tsx
+jest.config.js
+jest.config.ts
+
+# Git and Editor configs
+.git
+.gitignore
+.vscode
+.idea
+
+# OS system files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Miscellaneous
+*.swp
+*.swo
+*.bak
+*.tmp
