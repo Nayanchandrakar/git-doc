@@ -13,8 +13,8 @@ FROM oven/bun:${VERSION} AS production
 WORKDIR /app
 
 # Copy the built artifacts from the builder stage
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --from=development /app/.next/standalone ./
+COPY --from=development /app/.next/static ./.next/static
 
 # Set the environment variables
 ENV NODE_ENV=production
