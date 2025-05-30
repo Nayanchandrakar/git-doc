@@ -87,7 +87,7 @@ The project uses a multi-stage Dockerfile with the `oven/bun` image for producti
 2. **Run in Production Mode**:
    For production with optimized build:
    ```bash
-   docker run --rm -it -p 3000:3000 --env-file .env.local git-doc:latest
+   docker run -p 3000:3000 --env-file .env git-doc:latest
    ```
 
 ## Usage
