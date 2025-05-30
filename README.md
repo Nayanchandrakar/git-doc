@@ -2,6 +2,8 @@
 
 Git Index is a Next.js application designed to analyze Git repositories, providing detailed insights into repository structure, file contents, and estimated token counts. It supports efficient repository cloning, file exclusion, and analysis, with a modern UI and containerized deployment using Docker. The application integrates with AWS S3 for file storage and Upstash Redis for rate limiting, making it suitable for both local development and production environments.
 
+![image](https://github.com/user-attachments/assets/9b565d3d-27f6-4b6a-a14e-cb77f37a6749)
+
 ## Features
 
 - **Repository Analysis**: Clones Git repositories and generates detailed reports on file count, content, and directory structure.
