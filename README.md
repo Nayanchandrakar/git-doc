@@ -1,6 +1,6 @@
-# Git-Doc
+# Git Index
 
-Git-Doc is a Next.js application designed to analyze Git repositories, providing detailed insights into repository structure, file contents, and estimated token counts. It supports efficient repository cloning, file exclusion, and analysis, with a modern UI and containerized deployment using Docker. The application integrates with AWS S3 for file storage and Upstash Redis for rate limiting, making it suitable for both local development and production environments.
+Git Index is a Next.js application designed to analyze Git repositories, providing detailed insights into repository structure, file contents, and estimated token counts. It supports efficient repository cloning, file exclusion, and analysis, with a modern UI and containerized deployment using Docker. The application integrates with AWS S3 for file storage and Upstash Redis for rate limiting, making it suitable for both local development and production environments.
 
 ## Features
 
@@ -10,9 +10,9 @@ Git-Doc is a Next.js application designed to analyze Git repositories, providing
 - **Directory Tree Visualization**: Uses the `tree` command to generate a formatted directory structure.
 - **Concurrency Management**: Limits concurrent file operations with `p-limit` for optimized performance.
 - **TypeScript Support**: Built with TypeScript for type safety and maintainability.
-- **Modern UI**: Leverages Tailwind CSS, Radix UI, and Lucide React for a responsive, user-friendly interface.
+- **Modern UI**: Leverages Tailwind CSS, Shadcn UI , Radix UI and Lucide React for a responsive, user-friendly interface.
 - **Code Quality**: Enforces linting and formatting with Biome and Husky for consistent code standards.
-- **Dockerized Deployment**: Multi-stage Docker builds for development and production using the `oven/bun` image.
+- **Dockerized Deployment**: Multi-stage Docker builds for production using the `oven/bun` image.
 - **API Integration**: Uses Hono for server-side routes, with support for rate limiting via Upstash Redis.
 - **File Storage**: Integrates with AWS S3 for storing analysis outputs.
 
@@ -22,7 +22,7 @@ Git-Doc is a Next.js application designed to analyze Git repositories, providing
 - **Language**: TypeScript
 - **Runtime**: Bun
 - **Styling**: Tailwind CSS, tw-animate-css
-- **UI Components**: Radix UI, Lucide React
+- **UI Components**: Shadcn UI , Radix UI, Lucide React
 - **Form Handling**: React Hook Form with Zod validation
 - **Git Operations**: simple-git
 - **API**: Hono
@@ -37,9 +37,9 @@ Git-Doc is a Next.js application designed to analyze Git repositories, providing
 - **Bun**: Required for running scripts and local development.
 - **Git**: Required for repository cloning.
 - **Docker**: Required for containerized deployment.
-- **Node.js**: Optional for local development (version >= 20.x).
-- **AWS Account**: Required for S3 integration (optional for local development).
-- **Upstash Redis Account**: Required for rate limiting (optional for local development).
+- **Node.js**: Required for local development (version >= 20.x).
+- **AWS Account**: Required for S3 integration.
+- **Upstash Redis Account**: Required for rate limiting.
 
 ## Installation
 
@@ -47,7 +47,7 @@ Git-Doc is a Next.js application designed to analyze Git repositories, providing
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/<your-username>/git-doc.git
+   git clone https://github.com/Nayanchandrakar/git-doc.git
    cd git-doc
    ```
 
