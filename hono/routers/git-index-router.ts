@@ -35,7 +35,7 @@ const gitIndexRouter = new Hono().post(
       })
 
       return c.json(
-        { data: `https://d33aluc0l6cahu.cloudfront.net/${fileName}` },
+        { data: `${process.env.CLOUDFRONT_URL}/${fileName}` },
         200,
       )
     } catch (error) {
